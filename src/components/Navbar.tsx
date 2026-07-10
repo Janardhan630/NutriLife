@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Leaf, Menu, X } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/utils/cn';
 
 const LINKS = [
@@ -15,6 +16,10 @@ const LINKS = [
 /** Sticky glassmorphic top navigation for public pages. */
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
+  const cta = user
+    ? { to: '/dashboard', label: 'Open App' }
+    : { to: '/login', label: 'Sign in' };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -44,8 +49,8 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link to="/dashboard" className="btn-primary hidden sm:inline-flex">
-            Open App
+          <Link to={cta.to} className="btn-primary hidden sm:inline-flex">
+            {cta.label}
           </Link>
           <button
             type="button"
@@ -79,8 +84,8 @@ export default function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
-              <Link to="/dashboard" className="btn-primary mt-2" onClick={() => setMobileOpen(false)}>
-                Open App
+              <Link to={cta.to} className="btn-primary mt-2" onClick={() => setMobileOpen(false)}>
+                {cta.label}
               </Link>
             </div>
           </motion.div>
