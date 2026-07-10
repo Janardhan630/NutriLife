@@ -22,7 +22,7 @@ export default function App() {
       <ThemeProvider>
         <ToastProvider>
           <AppProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
               <ScrollToTop />
               <AppRoutes />
               <ToastContainer />
