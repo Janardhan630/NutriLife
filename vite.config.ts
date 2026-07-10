@@ -4,7 +4,7 @@ import path from 'node:path';
 
 export default defineConfig({
   // Serves from the repo subpath on GitHub Pages; dev stays at '/'
-  base: process.env.GITHUB_ACTIONS ? '/nutrilife/' : '/',
+  base: process.env.GITHUB_ACTIONS ? '/NutriLife/' : '/',
   plugins: [react()],
   resolve: {
     alias: {
