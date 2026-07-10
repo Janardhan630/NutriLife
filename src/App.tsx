@@ -4,6 +4,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import ToastContainer from '@/components/Toast';
 import AppRoutes from '@/routes';
 import { AppProvider } from '@/context/AppContext';
+import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ToastProvider } from '@/context/ToastContext';
 
@@ -21,13 +22,15 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <ToastProvider>
-          <AppProvider>
+          <AuthProvider>
+            <AppProvider>
             <BrowserRouter basename={import.meta.env.BASE_URL}>
               <ScrollToTop />
               <AppRoutes />
               <ToastContainer />
             </BrowserRouter>
-          </AppProvider>
+            </AppProvider>
+          </AuthProvider>
         </ToastProvider>
       </ThemeProvider>
     </ErrorBoundary>

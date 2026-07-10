@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Flame, Menu, X } from 'lucide-react';
+import { Flame, LogIn, LogOut, Menu, X } from 'lucide-react';
 import Sidebar, { APP_LINKS } from '@/components/Sidebar';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useApp } from '@/context/AppContext';
+import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/context/ToastContext';
 import { cn } from '@/utils/cn';
 
 /**
@@ -14,7 +16,14 @@ import { cn } from '@/utils/cn';
 export default function AppLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { profile, streak } = useApp();
+  const { user, logout } = useAuth();
+  const { addToast } = useToast();
   const location = useLocation();
+
+  function onSignOut() {
+    logout();
+    addToast('Signed out — see you soon! 👋', 'info');
+  }
 
   const pageTitle =
     APP_LINKS.find((l) => location.pathname.startsWith(l.to))?.label ?? 'NutriLife';
@@ -109,13 +118,30 @@ export default function AppLayout() {
               <span className="text-numeric">{streak}</span> day{streak === 1 ? '' : 's'}
             </span>
             <ThemeToggle />
-            <Link
-              to="/profile"
-              aria-label="Open profile"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-xl transition-transform hover:scale-105 dark:bg-primary-500/20"
-            >
-              {profile.avatar}
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  aria-label="Open profile"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-xl transition-transform hover:scale-105 dark:bg-primary-500/20"
+                >
+                  {profile.avatar}
+                </Link>
+                <button
+                  type="button"
+                  onClick={onSignOut}
+                  aria-label="Sign out"
+                  title="Sign out"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:border-danger/40 hover:text-danger dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                >
+                  <LogOut size={17} />
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="btn-primary !py-2">
+                <LogIn size={15} aria-hidden="true" /> Sign in
+              </Link>
+            )}
           </div>
         </header>
 
